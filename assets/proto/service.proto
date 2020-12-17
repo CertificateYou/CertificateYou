@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+option go_package = "proto/service";
+
+message TwitterAccount {
+    string screen_name = 1;
+}
+
+message Person {
+    string id = 1;
+    repeated Certification certifications = 2;
+    repeated TwitterAccount twitter_accounts = 3;
+}
+
+message Ability {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+}
+
+enum Status {
+    SUCCESS = 0;
+    NOT_FOUND = 1;
+    INVALID_REQUEST = 2;
+    INTERNAL_SERVER_ERROR = 3;
+}
+
+message PutPersonRequest {
+    repeated Person people = 1;
+}
+
+message PutPersonResponse {
+    Status status = 1;
+}
+
+message GetPersonRequest {
+    repeated Person people = 1;
+}
+
+message GetPersonResponse {
+    repeated Person people = 1;
+    Status status = 2;
+}
+
+message PutAbilityRequest {
+    repeated Ability abilities = 1;
+}
+
+message PutAbilityResponse {
+    Status status = 1;
+}
+
+message GetAbilityRequest {
+    repeated Ability abilities = 1;
+}
+
+message GetAbilityResponse {
+    repeated Ability abilities = 1;
+    Status status = 2;
+}
+
+message Vote {
+    Person from = 1;
+    Person to = 2;
+    Ability ability = 3;
+    bool is_valid = 4;
+}
+
+message VoteRequest {
+    repeated Vote votes = 1;
+}
+
+message VoteResponse {
+    Status status = 1;
+}
+
+message Certification {
+    Ability ability = 1;
+    repeated Person people_say_yes = 2;
+    repeated Person people_say_no = 3;
+}
+
+message GetAllCertificationRequest {
+    repeated Person people = 1;
+}
+
+message GetAllCertificationResponse {
+    repeated Person people = 2;
+}
+
+service CertificationService {
+    rpc PutPeople (PutPersonRequest) returns (PutPersonResponse);
+    rpc GetPeople (GetPersonRequest) returns (GetPersonResponse);
+    rpc PutAbility (PutAbilityRequest) returns (PutAbilityResponse);
+    rpc GetAbility (GetAbilityRequest) returns (GetAbilityResponse);
+    rpc Vote (VoteRequest) returns (VoteResponse);
+    rpc GetCertification (GetAllCertificationRequest) returns (GetAllCertificationResponse);
+}
